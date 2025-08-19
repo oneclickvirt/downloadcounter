@@ -24,6 +24,11 @@ https://ghdownload.spiritlhl.net/
 
 [![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/downloadcounters?label=Downloads)](https://github.com/oneclickvirt/downloadcounters/releases)
 
+
+## 类似项目
+
+访问数统计：https://github.com/oneclickvirt/hitscounter
+
 ## Thanks
 
 感谢 https://github.com/bestk/github-release-download-badges 本项目受此启发诞生
