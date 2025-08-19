@@ -1,4 +1,4 @@
-# downloadcounters
+# downloadcounter
 
 A lightweight **GitHub Release download counter** based on **Cloudflare Workers**.
 
