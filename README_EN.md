@@ -15,6 +15,10 @@ Once deployed, visit your configured domain to access the counter generator page
 
 ## Example
 
+https://ghdownload.spiritlhl.net/
+
+build
+
 [![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/downloadcounters?label=Downloads)](https://github.com/oneclickvirt/downloadcounters/releases)
 
 ## Thanks
