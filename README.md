@@ -18,6 +18,10 @@ downloadcounters 一个基于 Cloudflare Workers 轻量级Release下载计数器
 
 ## 示例
 
+https://ghdownload.spiritlhl.net/
+
+生成
+
 [![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/downloadcounters?label=Downloads)](https://github.com/oneclickvirt/downloadcounters/releases)
 
 ## Thanks
