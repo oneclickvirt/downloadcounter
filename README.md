@@ -2,6 +2,10 @@
 
 downloadcounters 一个基于 Cloudflare Workers 轻量级Release下载计数器
 
+## 语言
+
+[中文文档](README.md) | [English Docs](README_EN.md)
+
 ## 部署步骤
 
 1. 创建Workers
