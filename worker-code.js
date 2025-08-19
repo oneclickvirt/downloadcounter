@@ -20,7 +20,7 @@ async function handleRequest(request) {
 
   if (url.pathname === '/example.svg') {
     const customColor = url.searchParams.get("color") || '#007ec6';
-    const customLabel = url.searchParams.get("label") || 'downloads';
+    const customLabel = url.searchParams.get("label") || 'Downloads';
     const style = url.searchParams.get("style") || "flat";
     const svg = generateBadgeSVG(customLabel, "1.2K", customColor, style);
     return new Response(svg, {
@@ -36,7 +36,7 @@ async function handleRequest(request) {
   const style = url.searchParams.get("style") || "flat";
 
   if (pathParts.length < 2 || pathParts.length > 3) {
-    const errorSvg = generateBadgeSVG("downloads", "invalid path", "#e05d44");
+    const errorSvg = generateBadgeSVG("Downloads", "invalid path", "#e05d44");
     return new Response(errorSvg, {
       headers: { "Content-Type": "image/svg+xml" },
     });
@@ -124,12 +124,12 @@ async function handleRequest(request) {
     } else {
       if (tag) {
         if (tag.toLowerCase() === "latest") {
-          label = `${actualTag} downloads`;
+          label = `${actualTag} Downloads`;
         } else {
-          label = `${tag} downloads`;
+          label = `${tag} Downloads`;
         }
       } else {
-        label = "downloads";
+        label = "Downloads";
       }
     }
 
@@ -145,7 +145,7 @@ async function handleRequest(request) {
       },
     });
   } catch (error) {
-    const errorSvg = generateBadgeSVG("downloads", "error", "#e05d44");
+    const errorSvg = generateBadgeSVG("Downloads", "error", "#e05d44");
     return new Response(errorSvg, {
       headers: {
         "Content-Type": "image/svg+xml",
@@ -423,7 +423,7 @@ function serveBadgeGeneratorPage() {
 </head>
 <body>
   <div class="container">
-    <h1>GitHub Downloads Badge Generator</h1>
+    <h1>GitHub Releases Downloads Badge Generator</h1>
     
     <div class="form-group">
       <label for="owner">Repository Owner</label>
@@ -452,7 +452,7 @@ function serveBadgeGeneratorPage() {
     
     <div class="form-group">
       <label for="customLabel">Custom Label (Optional)</label>
-      <input type="text" id="customLabel" placeholder="downloads" onchange="updatePreview()">
+      <input type="text" id="customLabel" placeholder="Downloads" onchange="updatePreview()">
     </div>
     
     <div class="form-group">
@@ -507,7 +507,7 @@ function serveBadgeGeneratorPage() {
   <script>
     function updatePreview() {
       const style = document.getElementById('style').value;
-      const label = document.getElementById('customLabel').value || 'downloads';
+      const label = document.getElementById('customLabel').value || 'Downloads';
       const color = document.getElementById('customColor').value || document.getElementById('colorPicker').value;
       
       const params = new URLSearchParams({
