@@ -53,7 +53,7 @@ async function handleRequest(request) {
         githubPath = `/repos/${owner}/${repo}/releases/tags/${tag}`;
       }
     } else {
-      githubPath = `/repos/${owner}/${repo}/releases`;
+      githubPath = `/repos/${owner}/${repo}/releases?per_page=100`;
     }
 
     const data = await fetchWithFallback(githubPath);
@@ -72,7 +72,26 @@ async function handleRequest(request) {
       }
     } else {
       if (Array.isArray(data)) {
-        data.forEach((release) => {
+        let page = 1;
+        let allReleases = data;
+        
+        while (data.length === 100) {
+          page++;
+          const nextPagePath = `/repos/${owner}/${repo}/releases?per_page=100&page=${page}`;
+          try {
+            const nextPageData = await fetchWithFallback(nextPagePath);
+            if (Array.isArray(nextPageData) && nextPageData.length > 0) {
+              allReleases = allReleases.concat(nextPageData);
+              data.length = nextPageData.length;
+            } else {
+              break;
+            }
+          } catch (error) {
+            break;
+          }
+        }
+        
+        allReleases.forEach((release) => {
           if (release.assets && Array.isArray(release.assets)) {
             release.assets.forEach((asset) => {
               totalDownloads += asset.download_count || 0;
@@ -139,20 +158,24 @@ async function handleRequest(request) {
 async function fetchWithFallback(path) {
   for (const endpoint of API_ENDPOINTS) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
       const response = await fetch(`${endpoint}${path}`, {
         headers: {
           "User-Agent": "GitHub-Downloads-Badge/1.0",
           Accept: "application/vnd.github.v3+json",
         },
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         return await response.json();
       }
 
-      if (response.status === 404) {
-        throw new Error('Repository or tag not found');
-      }
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     } catch (error) {
       if (endpoint === API_ENDPOINTS[API_ENDPOINTS.length - 1]) {
         throw error;
