@@ -5,7 +5,7 @@ downloadcounters 一个基于 Cloudflare Workers 轻量级Release下载计数器
 ## 部署步骤
 
 1. 创建Workers
-   导航至 ```Workers & Pages``` > ```Create application``` > ```Create Worker``` > ```"Hello World" Worker``` ，新建后重命名为 ```ghdownload``` ，复制 ```worker-code.js``` 代码到Worker编辑器中的```worker.js```应用部署。
+   导航至 ```Workers & Pages``` > ```Create application``` > ```Create Worker``` > ```"Hello World" Worker``` ，新建后重命名为 ```downloadcounters``` ，复制 ```worker-code.js``` 代码到Worker编辑器中的```worker.js```应用部署。
 
 2. 配置域名
    - 在Worker的 ```Domains & Routes``` - ```Add``` - ```Custom domain``` 中添加你的计数器域名
