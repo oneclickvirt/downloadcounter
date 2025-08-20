@@ -17,9 +17,13 @@ Once deployed, visit your configured domain to access the counter generator page
 
 https://ghdownload.spiritlhl.net/
 
+use
+
+https://github.com/oneclickvirt/ecs
+
 build
 
-[![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/downloadcounters?label=Downloads)](https://github.com/oneclickvirt/downloadcounters/releases)
+[![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/ecs?color=36c600)](https://github.com/oneclickvirt/ecs/releases)
 
 ## Thanks
 
