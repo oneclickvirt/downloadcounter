@@ -13,11 +13,9 @@ const API_ENDPOINTS = [
 async function handleRequest(request) {
   const url = new URL(request.url);
   const pathParts = url.pathname.split("/").filter((part) => part);
-
   if (pathParts.length === 0) {
     return serveBadgeGeneratorPage();
   }
-
   if (url.pathname === '/example.svg') {
     const customColor = url.searchParams.get("color") || '#007ec6';
     const customLabel = url.searchParams.get("label") || 'Downloads';
@@ -30,20 +28,16 @@ async function handleRequest(request) {
       }
     });
   }
-
   const customColor = url.searchParams.get("color");
   const customLabel = url.searchParams.get("label");
   const style = url.searchParams.get("style") || "flat";
-
   if (pathParts.length < 2 || pathParts.length > 3) {
     const errorSvg = generateBadgeSVG("Downloads", "invalid path", "#e05d44");
     return new Response(errorSvg, {
       headers: { "Content-Type": "image/svg+xml" },
     });
   }
-
   const [owner, repo, tag] = pathParts;
-
   try {
     let githubPath;
     if (tag) {
@@ -55,12 +49,9 @@ async function handleRequest(request) {
     } else {
       githubPath = `/repos/${owner}/${repo}/releases?per_page=100`;
     }
-
     const data = await fetchWithFallback(githubPath);
-
     let totalDownloads = 0;
     let actualTag = tag;
-
     if (tag) {
       if (data.assets && Array.isArray(data.assets)) {
         data.assets.forEach((asset) => {
@@ -74,7 +65,6 @@ async function handleRequest(request) {
       if (Array.isArray(data)) {
         let page = 1;
         let allReleases = data;
-        
         while (data.length === 100) {
           page++;
           const nextPagePath = `/repos/${owner}/${repo}/releases?per_page=100&page=${page}`;
@@ -90,7 +80,6 @@ async function handleRequest(request) {
             break;
           }
         }
-        
         allReleases.forEach((release) => {
           if (release.assets && Array.isArray(release.assets)) {
             release.assets.forEach((asset) => {
@@ -100,9 +89,7 @@ async function handleRequest(request) {
         });
       }
     }
-
     const formattedCount = formatDownloadCount(totalDownloads);
-
     let color;
     if (customColor) {
       color = parseColor(customColor);
@@ -117,7 +104,6 @@ async function handleRequest(request) {
         color = "#e05d44";
       }
     }
-
     let label;
     if (customLabel) {
       label = customLabel;
@@ -132,9 +118,7 @@ async function handleRequest(request) {
         label = "Downloads";
       }
     }
-
     const svg = generateBadgeSVG(label, formattedCount, color, style);
-
     return new Response(svg, {
       headers: {
         "Content-Type": "image/svg+xml",
@@ -160,7 +144,6 @@ async function fetchWithFallback(path) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
       const response = await fetch(`${endpoint}${path}`, {
         headers: {
           "User-Agent": "GitHub-Downloads-Badge/1.0",
@@ -168,13 +151,10 @@ async function fetchWithFallback(path) {
         },
         signal: controller.signal
       });
-
       clearTimeout(timeoutId);
-
       if (response.ok) {
         return await response.json();
       }
-
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     } catch (error) {
       if (endpoint === API_ENDPOINTS[API_ENDPOINTS.length - 1]) {
@@ -214,23 +194,18 @@ function parseColor(colorParam) {
     informational: "#007ec6",
     inactive: "#9f9f9f",
   };
-
   if (predefinedColors[colorParam.toLowerCase()]) {
     return predefinedColors[colorParam.toLowerCase()];
   }
-
   if (/^[0-9a-fA-F]{6}$/.test(colorParam)) {
     return `#${colorParam}`;
   }
-
   if (/^#[0-9a-fA-F]{6}$/.test(colorParam)) {
     return colorParam;
   }
-
   if (/^[0-9a-fA-F]{3}$/.test(colorParam)) {
     return `#${colorParam[0]}${colorParam[0]}${colorParam[1]}${colorParam[1]}${colorParam[2]}${colorParam[2]}`;
   }
-
   return "#4c1";
 }
 
@@ -248,20 +223,16 @@ function generateBadgeSVG(label, value, color, style = "flat") {
     }
     return width;
   };
-
   const labelWidth = Math.max(getTextWidth(label) + 10, 40);
   const valueWidth = Math.max(getTextWidth(value) + 10, 40);
   const totalWidth = labelWidth + valueWidth;
-
   let rx = 3;
   let gradientOpacity = 0.1;
-
   if (style === "flat-square") {
     rx = 0;
   } else if (style === "plastic") {
     gradientOpacity = 0.2;
   }
-
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="20">
     <linearGradient id="b" x2="0" y2="100%">
       <stop offset="0" stop-color="#bbb" stop-opacity="${gradientOpacity}"/>
@@ -300,12 +271,16 @@ function serveBadgeGeneratorPage() {
       padding: 20px;
       background: #f5f5f5;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     .container {
       background: white;
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      flex: 1;
     }
     h1 {
       text-align: center;
@@ -414,6 +389,42 @@ function serveBadgeGeneratorPage() {
       padding-bottom: 8px;
       margin-top: 30px;
     }
+    .footer {
+      margin-top: 40px;
+      padding: 20px 0;
+      border-top: 1px solid #eee;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+    .footer a {
+      color: #2196F3;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #24292e;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    .github-link:hover {
+      background: #1c2126;
+      color: white;
+      text-decoration: none;
+    }
+    .github-icon {
+      width: 16px;
+      height: 16px;
+    }
     @media (min-width: 768px) {
       button {
         width: auto;
@@ -424,23 +435,19 @@ function serveBadgeGeneratorPage() {
 <body>
   <div class="container">
     <h1>GitHub Releases Downloads Badge Generator</h1>
-    
     <div class="form-group">
       <label for="owner">Repository Owner</label>
       <input type="text" id="owner" placeholder="octocat" required>
     </div>
-    
     <div class="form-group">
       <label for="repo">Repository Name</label>
       <input type="text" id="repo" placeholder="Hello-World" required>
     </div>
-    
     <div class="form-group">
       <label for="tag">Tag/Version (Optional)</label>
       <input type="text" id="tag" placeholder="latest or v1.0.0 or leave empty">
       <small>Leave empty for total downloads across all releases</small>
     </div>
-    
     <div class="form-group">
       <label for="style">Badge Style</label>
       <select id="style" onchange="updatePreview()">
@@ -449,12 +456,10 @@ function serveBadgeGeneratorPage() {
         <option value="plastic">Plastic</option>
       </select>
     </div>
-    
     <div class="form-group">
       <label for="customLabel">Custom Label (Optional)</label>
       <input type="text" id="customLabel" placeholder="Downloads" onchange="updatePreview()">
     </div>
-    
     <div class="form-group">
       <label for="customColor">Custom Color (Optional)</label>
       <div class="color-input">
@@ -462,31 +467,24 @@ function serveBadgeGeneratorPage() {
         <input type="text" id="customColor" placeholder="blue, #007ec6, or 007ec6" onchange="updatePreview()">
       </div>
     </div>
-    
     <div class="preview-badge">
       <img id="previewImg" src="/example.svg" alt="Preview Badge">
     </div>
-    
     <button onclick="generateBadge()">Generate Badge</button>
-    
     <div id="result" class="result">
       <h3 class="section-title">Badge URL</h3>
       <code id="badgeUrl"></code>
       <button class="copy-btn" onclick="copyCode('badgeUrl')">Copy URL</button>
-      
       <h3 class="section-title">Markdown</h3>
       <code id="markdownCode"></code>
       <button class="copy-btn" onclick="copyCode('markdownCode')">Copy Markdown</button>
-      
       <h3 class="section-title">HTML</h3>
       <code id="htmlCode"></code>
       <button class="copy-btn" onclick="copyCode('htmlCode')">Copy HTML</button>
-      
       <div class="preview">
         <h4>Live Preview:</h4>
         <div id="livePreview"></div>
       </div>
-      
       <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 4px;">
         <h4>Usage Examples:</h4>
         <ul>
@@ -502,6 +500,14 @@ function serveBadgeGeneratorPage() {
         </ul>
       </div>
     </div>
+    <div class="footer">
+      <p style="margin-top: 15px; font-size: 13px;">
+        This project is open source at 
+        <a href="https://github.com/oneclickvirt/downloadcounter" target="_blank" rel="noopener noreferrer">
+          https://github.com/oneclickvirt/downloadcounter
+        </a>
+      </p>
+    </div>
   </div>
 
   <script>
@@ -509,21 +515,17 @@ function serveBadgeGeneratorPage() {
       const style = document.getElementById('style').value;
       const label = document.getElementById('customLabel').value || 'Downloads';
       const color = document.getElementById('customColor').value || document.getElementById('colorPicker').value;
-      
       const params = new URLSearchParams({
         style: style,
         label: label,
         color: color.replace('#', '')
       });
-      
       document.getElementById('previewImg').src = '/example.svg?' + params.toString();
     }
-    
     document.getElementById('colorPicker').addEventListener('input', function(e) {
       document.getElementById('customColor').value = e.target.value;
       updatePreview();
     });
-    
     function generateBadge() {
       const owner = document.getElementById('owner').value.trim();
       const repo = document.getElementById('repo').value.trim();
@@ -531,34 +533,27 @@ function serveBadgeGeneratorPage() {
       const style = document.getElementById('style').value;
       const customLabel = document.getElementById('customLabel').value.trim();
       const customColor = document.getElementById('customColor').value.trim();
-      
       if (!owner || !repo) {
         alert('Please enter both owner and repository name');
         return;
       }
-      
       const domain = window.location.host;
       let path = '/' + owner + '/' + repo;
       if (tag) {
         path += '/' + tag;
       }
-      
       const params = new URLSearchParams();
       if (style !== 'flat') params.set('style', style);
       if (customLabel) params.set('label', customLabel);
       if (customColor) params.set('color', customColor.replace('#', ''));
-      
       const queryString = params.toString();
       const fullUrl = 'https://' + domain + path + (queryString ? '?' + queryString : '');
-      
       document.getElementById('badgeUrl').textContent = fullUrl;
       document.getElementById('markdownCode').textContent = '[![Downloads](' + fullUrl + ')](https://github.com/' + owner + '/' + repo + '/releases)';
       document.getElementById('htmlCode').textContent = '<a href="https://github.com/' + owner + '/' + repo + '/releases"><img src="' + fullUrl + '" alt="Downloads"></a>';
       document.getElementById('livePreview').innerHTML = '<img src="' + fullUrl + '" alt="Downloads Badge">';
-      
       document.getElementById('result').style.display = 'block';
     }
-    
     function copyCode(elementId) {
       const el = document.getElementById(elementId);
       const text = el.textContent;
@@ -571,12 +566,10 @@ function serveBadgeGeneratorPage() {
         }, 2000);
       });
     }
-    
     updatePreview();
   </script>
 </body>
 </html>`;
-
   return new Response(html, {
     headers: { 'Content-Type': 'text/html;charset=UTF-8' }
   });
