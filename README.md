@@ -20,10 +20,13 @@ downloadcounter 一个基于 Cloudflare Workers 轻量级Release下载计数器
 
 https://ghdownload.spiritlhl.net/
 
+对应
+
+https://github.com/oneclickvirt/ecs
+
 生成
 
-[![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/downloadcounters?label=Downloads)](https://github.com/oneclickvirt/downloadcounters/releases)
-
+[![Downloads](https://ghdownload.spiritlhl.net/oneclickvirt/ecs?color=36c600)](https://github.com/oneclickvirt/ecs/releases)
 
 ## 类似项目
 
