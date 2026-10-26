@@ -1,0 +1,10 @@
+{
+  "repository": "oneclickvirt/downloadcounter",
+  "skill_name": "oneclickvirt-downloadcounter",
+  "mcp": false,
+  "files": {
+    "agent/profile.json": "7e5b5dc0e4a8e96fe2cd82071cc839fbbf2dac4754c27fb5123669dc910c0c82",
+    "skills/oneclickvirt-downloadcounter/SKILL.md": "a9ae5eed8d3f0c5207de366f736cfbf6af3a2b8c5900f0465855a55bd6484625",
+    "skills/oneclickvirt-downloadcounter/SKILL_ZH.md": "8517d3da2f891d8d6d9e501a3198e1926f539941a606439c04a31c6c528e1a17"
+  }
+}

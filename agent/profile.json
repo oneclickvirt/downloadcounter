@@ -1,0 +1,17 @@
+{
+  "repository": "oneclickvirt/downloadcounter",
+  "branch": "main",
+  "skill_name": "oneclickvirt-downloadcounter",
+  "purpose": "Deploy and troubleshoot the GitHub Release download-counter Cloudflare Worker.",
+  "notes": [
+    "Inspect worker-code.js and its route parameters. Query existing public release counts; do not invent authenticated administration endpoints or deploy account-wide Cloudflare changes."
+  ],
+  "guide": "https://www.spiritlhl.net/guide/agent_integrations.html",
+  "releases": false,
+  "mcp": false,
+  "source_files": [],
+  "purpose_zh": "部署和排查 GitHub Release 下载数统计的 Cloudflare Worker。",
+  "notes_zh": [
+    "先检查 worker-code.js 的真实路由参数；查询已有公开 Release 下载数，不虚构管理接口或改动账户范围的 Cloudflare 设置。"
+  ]
+}
